@@ -16,4 +16,4 @@ class NWSClient:
                 return response.json()
             except ValueError as e:
                 # Let JSON errors propagate for test coverage
-                raise e
+                raise
