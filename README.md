@@ -1,8 +1,26 @@
 # Weather MCP Server
 
-## NWSClient Public Interface
+A lightweight FastMCP service exposing National Weather Service alerts and forecasts via simple RPC-style “tools”.
 
-The `NWSClient` class provides an async method to fetch weather alerts for a given US state:
+## Installation
+
+Install from PyPI:
+
+```bash
+pip install weather-mcp-server
+```
+
+Or install from source for development:
+
+```bash
+git clone https://github.com/YourOrg/weather-mcp-server.git
+cd weather-mcp-server
+pip install -e ".[dev]"
+```
+
+## Usage
+
+### As a Python library
 
 ```python
 from weather.nws_client import NWSClient
@@ -17,8 +35,43 @@ async def main():
 asyncio.run(main())
 ```
 
-- `get_alerts(state: str)` returns a list of alerts with `headline`, `event`, and `severity` keys.
-- All network calls are async and can raise `httpx.HTTPStatusError` or `ValueError` for malformed responses.
+### As a FastMCP server
+
+```bash
+weather-mcp-server --transport stdio
+```
+
+## API Reference
+
+### get_alerts
+
+Fetch formatted weather alerts for a given two-letter US state code.
+
+**Arguments:**
+- `state` (str): Two-letter uppercase state abbreviation (e.g. "CA").
+
+**Returns:**
+- `str`: Formatted alerts separated by `---`, or an error message.
+
+### get_forecast
+
+Fetch formatted weather forecast for a location.
+
+**Arguments:**
+- `latitude` (float): Latitude between -90 and 90.
+- `longitude` (float): Longitude between -180 and 180.
+
+**Returns:**
+- `str`: Forecast for up to next 5 periods or an error message.
+
+### /health
+
+Health check endpoint.
+
+**HTTP GET** `/health`
+
+**Returns JSON:**
+- `{"status": "ok"}`
 
 ## Testing & Coverage
 
