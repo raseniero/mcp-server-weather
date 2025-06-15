@@ -8,14 +8,15 @@ async def test_get_alerts_endpoint(monkeypatch):
     RED: Test the /get_alerts endpoint returns alerts for a valid state code.
     This test should fail initially because the endpoint is not yet implemented as an HTTP route.
     """
-    # Arrange: monkeypatch the internal data fetch to avoid real API calls
-    async def fake_make_nws_request(url):
+    # Arrange: monkeypatch NWSClient._make_request to avoid real API calls
+    from src.weather.nws_client import NWSClient
+    async def fake_make_nws_request(self, url):
         return {
             "features": [
                 {"properties": {"event": "Flood Warning", "severity": "Severe", "headline": "Flooding in effect"}}
             ]
         }
-    monkeypatch.setattr("src.weather.server.make_nws_request", fake_make_nws_request)
+    monkeypatch.setattr(NWSClient, "_make_request", fake_make_nws_request)
 
     # Act: call the get_alerts tool function directly
     result = await get_alerts("CA")

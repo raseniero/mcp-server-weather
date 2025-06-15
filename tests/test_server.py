@@ -62,9 +62,10 @@ async def test_get_alerts_invalid_state(server_module):
 @pytest.mark.asyncio
 async def test_get_alerts_malformed_response(monkeypatch, server_module):
     """Test get_alerts with a malformed API response (missing 'features')."""
-    async def fake_make_nws_request(url):
+    from src.weather.nws_client import NWSClient
+    async def fake_make_nws_request(self, url):
         return {"unexpected": "data"}
-    monkeypatch.setattr(server_module, "make_nws_request", fake_make_nws_request)
+    monkeypatch.setattr(NWSClient, "_make_request", fake_make_nws_request)
     result = await server_module.get_alerts("CA")
     assert "Malformed response" in result
 
@@ -96,9 +97,10 @@ async def test_get_alerts_returns_expected_format(monkeypatch):
         ]
     }
     import weather.server as server_module
-    async def fake_make_nws_request(url):
+    from src.weather.nws_client import NWSClient
+    async def fake_make_nws_request(self, url):
         return fake_alerts
-    monkeypatch.setattr(server_module, "make_nws_request", fake_make_nws_request)
+    monkeypatch.setattr(NWSClient, "_make_request", fake_make_nws_request)
     # Call get_alerts_data with a valid state code
     result = await server_module.get_alerts_data("CA")
     assert isinstance(result, list)

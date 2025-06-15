@@ -48,21 +48,28 @@ async def make_nws_request(url: str) -> dict[str, Any] | None:
 
 
 
-async def get_alerts_data(state: str) -> list[dict[str, Any]]:
+from src.weather.nws_client import NWSClient
+
+async def get_alerts_data(state: str, client: NWSClient | None = None) -> list[dict[str, Any]] | None:
     """
-    Fetch weather alerts for a given US state from the NWS API.
+    Fetch weather alerts for a given US state from the NWS API using NWSClient.
 
     Args:
         state: Two-letter US state code (e.g. 'CA', 'NY').
+        client: Optional NWSClient instance (for mocking/testing).
 
     Returns:
         A list of alert dictionaries with keys: 'headline', 'event', 'severity'.
-        Returns an empty list if no alerts are found or the response is malformed.
+        Returns None if the response is missing or malformed.
     """
+    if client is None:
+        client = NWSClient()
     url = f"{NWS_API_BASE}/alerts/active?area={state}"
-    data = await make_nws_request(url)
-    if not data or "features" not in data:
-        return []
+    data = await client._make_request(url)
+    if not data:
+        return None
+    if "features" not in data:
+        return None
     if not isinstance(data["features"], list):
         raise ValueError("Malformed response: 'features' is not a list.")
     alerts: list[dict[str, Any]] = []
@@ -78,17 +85,28 @@ async def get_alerts_data(state: str) -> list[dict[str, Any]]:
 @mcp.tool()
 async def get_alerts(state: str) -> str:
     """
-    FastMCP tool: Returns formatted weather alerts string for a US state.
+    FastMCP tool: Return formatted weather alerts for a US state using NWSClient.
+
+    Args:
+        state: Two-letter US state code (e.g. 'CA', 'NY').
+
+    Returns:
+        A formatted string of alerts or an error message.
     """
-    alerts = await get_alerts_data(state)
-    if not alerts:
-        return f"No alerts found for state: {state}"
-    formatted = []
-    for alert in alerts:
-        formatted.append(
-            f"Event: {alert['event']}\nSeverity: {alert['severity']}\nHeadline: {alert['headline']}"
-        )
+    # Input validation
+    if not isinstance(state, str) or len(state) != 2 or not state.isalpha() or not state.isupper() or state not in US_STATES:
+        return "Invalid state code. Please provide a two-letter uppercase state abbreviation."
+    client = NWSClient()
+    alerts_data = await get_alerts_data(state, client=client)
+    if alerts_data is None:
+        # Distinguish between malformed and empty
+        # If the API response is missing or malformed
+        return "Malformed response from weather service."
+    if not alerts_data:
+        return f"No active alerts for state: {state}"
+    formatted = [format_alert({"properties": alert}) for alert in alerts_data]
     return "\n---\n".join(formatted)
+
 
 
 def format_alert(feature: dict) -> str:
@@ -111,7 +129,7 @@ US_STATES = {
 @mcp.tool()
 async def get_alerts(state: str) -> str:
     """
-    FastMCP tool: Return formatted weather alerts for a US state.
+    FastMCP tool: Return formatted weather alerts for a US state using NWSClient.
 
     Args:
         state: Two-letter US state code (e.g. 'CA', 'NY').
@@ -122,36 +140,40 @@ async def get_alerts(state: str) -> str:
     # Input validation
     if not isinstance(state, str) or len(state) != 2 or not state.isalpha() or not state.isupper() or state not in US_STATES:
         return "Invalid state code. Please provide a two-letter uppercase state abbreviation."
-    data = await make_nws_request(f"{NWS_API_BASE}/alerts/active?area={state}")
-    if not data:
-        return "Unable to fetch alerts or no alerts found."
-    if "features" not in data:
+    client = NWSClient()
+    alerts_data = await get_alerts_data(state, client=client)
+    if alerts_data is None:
+        # Distinguish between malformed and empty
+        # If the API response is missing or malformed
         return "Malformed response from weather service."
-    if not data["features"]:
+    if not alerts_data:
         return f"No active alerts for state: {state}"
-    alerts = [format_alert(feature) for feature in data["features"]]
-    return "\n---\n".join(alerts)
+    formatted = [format_alert({"properties": alert}) for alert in alerts_data]
+    return "\n---\n".join(formatted)
 
 
-async def get_forecast_data(latitude: float, longitude: float) -> list[dict[str, Any]]:
+async def get_forecast_data(latitude: float, longitude: float, client: NWSClient | None = None) -> list[dict[str, Any]]:
     """
-    Fetch forecast periods for given coordinates from the NWS API.
+    Fetch forecast periods for given coordinates from the NWS API using NWSClient.
 
     Args:
         latitude: Latitude of the location (-90 to 90).
         longitude: Longitude of the location (-180 to 180).
+        client: Optional NWSClient instance (for mocking/testing).
 
     Returns:
         A list of forecast period dictionaries.
     Raises:
         ValueError: If the response is malformed or missing required keys.
     """
+    if client is None:
+        client = NWSClient()
     points_url = f"{NWS_API_BASE}/points/{latitude},{longitude}"
-    points_data = await make_nws_request(points_url)
+    points_data = await client._make_request(points_url)
     if not points_data or "properties" not in points_data or "forecast" not in points_data["properties"]:
         raise ValueError("Malformed response: missing 'properties' or 'forecast'.")
     forecast_url = points_data["properties"]["forecast"]
-    forecast_data = await make_nws_request(forecast_url)
+    forecast_data = await client._make_request(forecast_url)
     if not forecast_data or "properties" not in forecast_data or "periods" not in forecast_data["properties"]:
         raise ValueError("Malformed response: missing 'properties' or 'periods'.")
     periods = forecast_data["properties"]["periods"]
@@ -159,10 +181,11 @@ async def get_forecast_data(latitude: float, longitude: float) -> list[dict[str,
         raise ValueError("Malformed response: 'periods' is not a list.")
     return periods
 
+
 @mcp.tool()
 async def get_forecast(latitude: float, longitude: float) -> str:
     """
-    FastMCP tool: Return formatted weather forecast for a location.
+    FastMCP tool: Return formatted weather forecast for a location using NWSClient.
 
     Args:
         latitude: Latitude of the location (-90 to 90).
@@ -179,12 +202,11 @@ async def get_forecast(latitude: float, longitude: float) -> str:
         return "Invalid coordinates. Latitude and longitude must be numbers."
     if not (-90.0 <= lat <= 90.0 and -180.0 <= lon <= 180.0):
         return "Invalid coordinates. Latitude must be between -90 and 90, longitude between -180 and 180."
+    client = NWSClient()
     try:
-        periods = await get_forecast_data(lat, lon)
+        periods = await get_forecast_data(lat, lon, client=client)
     except ValueError as e:
-        # Malformed or missing keys in response
-        # Optionally log error here
-        return f"Malformed response from weather service. {str(e)}"
+        return str(e)
     except Exception:
         # Optionally log error here
         return "Malformed response from weather service."
@@ -200,6 +222,7 @@ async def get_forecast(latitude: float, longitude: float) -> str:
         """
         forecasts.append(forecast)
     return "\n---\n".join(forecasts)
+
 
 
 if __name__ == "__main__":
