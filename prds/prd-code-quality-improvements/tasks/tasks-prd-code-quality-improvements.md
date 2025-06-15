@@ -57,18 +57,18 @@
   - [x] 2.2.3 Add tests for error cases
   - [x] 2.2.4 Refactor implementation to pass all tests
 
-- [ ] 2.3 Add NWS API endpoints
-  - [ ] 2.3.1 Write test for `get_alerts` method
-  - [ ] 2.3.2 Implement `get_alerts` method
-  - [ ] 2.3.3 Write test for `get_forecast` method
-  - [ ] 2.3.4 Implement `get_forecast` method
-  - [ ] 2.3.5 Add response validation and error handling
+- [x] 2.3 Add NWS API endpoints
+  - [x] 2.3.1 Write test for `get_alerts` method
+  - [x] 2.3.2 Implement `get_alerts` method
+  - [x] 2.3.3 Write test for `get_forecast` method
+  - [x] 2.3.4 Implement `get_forecast` method
+  - [x] 2.3.5 Add response validation and error handling
 
 ### 3.0 Refactor Server Module
 
 - [ ] 3.1 Restructure server implementation
-  - [ ] 3.1.1 Write failing test for server initialization
-  - [ ] 3.1.2 Refactor server code to pass initialization test
+  - [x] 3.1.1 Write failing test for server initialization
+  - [x] 3.1.2 Refactor server code to pass initialization test
   - [ ] 3.1.3 Add type hints and docstrings
   - [ ] 3.1.4 Implement proper error handling
 

@@ -26,6 +26,17 @@ async def test_server_initialization(server_module):
     assert server_module.mcp.name == "weather"
 
 @pytest.mark.asyncio
+async def test_server_initialization_refactored(server_module):
+    """
+    Failing test for refactored server: expects WeatherServer class with FastMCP instance.
+    """
+    assert hasattr(server_module, "WeatherServer"), "WeatherServer class should be defined."
+    server = server_module.WeatherServer()
+    assert hasattr(server, "mcp"), "WeatherServer should have an 'mcp' attribute."
+    assert isinstance(server.mcp, FastMCP), "WeatherServer.mcp should be a FastMCP instance."
+    assert server.mcp.name == "weather"
+
+@pytest.mark.asyncio
 async def test_get_alerts_tool_registration(server_module):
     """Test that get_alerts is registered as a tool."""
     assert hasattr(server_module, "get_alerts")
@@ -44,15 +55,33 @@ async def test_get_forecast_tool_registration(server_module):
 
 @pytest.mark.asyncio
 async def test_get_alerts_invalid_state(server_module):
-    """Test get_alerts with an invalid state code returns an error message."""
-    result = await server_module.get_alerts("XX")
-    assert "Unable to fetch alerts" in result or "No active alerts" in result
+    """Test get_alerts with an invalid state code."""
+    result = await server_module.get_alerts("ZZ")
+    assert "Invalid state code" in result
+
+@pytest.mark.asyncio
+async def test_get_alerts_malformed_response(monkeypatch, server_module):
+    """Test get_alerts with a malformed API response (missing 'features')."""
+    async def fake_make_nws_request(url):
+        return {"unexpected": "data"}
+    monkeypatch.setattr(server_module, "make_nws_request", fake_make_nws_request)
+    result = await server_module.get_alerts("CA")
+    assert "Malformed response" in result
 
 @pytest.mark.asyncio
 async def test_get_forecast_invalid_coords(server_module):
-    """Test get_forecast with invalid coordinates returns an error message."""
-    result = await server_module.get_forecast(0.0, 0.0)
-    assert "Unable to fetch forecast" in result or "Unable to fetch detailed forecast." in result
+    """Test get_forecast with invalid coordinates."""
+    result = await server_module.get_forecast(200, 200)
+    assert "Invalid coordinates" in result
+
+@pytest.mark.asyncio
+async def test_get_forecast_malformed_response(monkeypatch, server_module):
+    """Test get_forecast with a malformed API response (missing 'properties' or 'periods')."""
+    async def fake_make_nws_request(url):
+        return {"unexpected": "data"}
+    monkeypatch.setattr(server_module, "make_nws_request", fake_make_nws_request)
+    result = await server_module.get_forecast(34.05, -118.25)
+    assert "Malformed response" in result
 
 @pytest.mark.asyncio
 async def test_get_alerts_returns_expected_format(monkeypatch):
