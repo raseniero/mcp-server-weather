@@ -9,7 +9,7 @@ class NWSClient:
         pass
 
     async def _make_request(self, url: str) -> dict[str, Any]:
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=10.0) as client:
             response = await client.get(url)
             response.raise_for_status()  # Will raise HTTPStatusError for non-200
             try:
