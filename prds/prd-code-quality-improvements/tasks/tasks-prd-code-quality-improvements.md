@@ -77,7 +77,8 @@
   - [x] 3.2.2 Refactor endpoint to use NWS client
   - [x] 3.2.3 Write test for `/get_forecast` endpoint
   - [x] 3.2.4 Refactor endpoint to use NWS client
-  - [ ] 3.2.5 Add input validation
+  - [x] 3.2.5 Add input validation
+  - [x] Add dedicated endpoint validation tests
 
 ### 4.0 Implement Unit Tests
 
