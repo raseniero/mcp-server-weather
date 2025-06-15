@@ -35,21 +35,21 @@
   - [x] 1.1.4 Create `tests` directory with `__init__.py`
   - [x] 1.1.5 Create `conftest.py` for pytest configuration
 
-- [ ] 1.2 Configure development environment
+- [x] 1.2 Configure development environment
   - [x] 1.2.1 Update `pyproject.toml` with project metadata
-  - [ ] 1.2.2 Add development dependencies (pytest, black, flake8, mypy)
-  - [ ] 1.2.3 Configure black and flake8 in `pyproject.toml`
-  - [ ] 1.2.4 Create `.flake8` configuration file
-  - [ ] 1.2.5 Update `.gitignore` for Python projects
+  - [x] 1.2.2 Add development dependencies (pytest, black, flake8, mypy)
+  - [x] 1.2.3 Configure black and flake8 in `pyproject.toml`
+  - [x] 1.2.4 Create `.flake8` configuration file
+  - [x] 1.2.5 Update `.gitignore` for Python projects
 
 ### 2.0 Refactor NWS Client Module
 
-- [ ] 2.1 Create NWS client module
-  - [ ] 2.1.1 Create `tests/test_nws_client.py`
-  - [ ] 2.1.2 Write failing test for `NWSClient` initialization
-  - [ ] 2.1.3 Create `nws_client.py` with minimal implementation
-  - [ ] 2.1.4 Refactor to pass initialization test
-  - [ ] 2.1.5 Add type hints and docstrings
+- [x] 2.1 Create NWS client module
+  - [x] 2.1.1 Create `tests/test_nws_client.py`
+  - [x] 2.1.2 Write failing test for `NWSClient` initialization
+  - [x] 2.1.3 Create `nws_client.py` with minimal implementation
+  - [x] 2.1.4 Refactor to pass initialization test
+  - [x] 2.1.5 Add type hints and docstrings
 
 - [ ] 2.2 Implement request utilities
   - [ ] 2.2.1 Write failing test for `_make_request` method
