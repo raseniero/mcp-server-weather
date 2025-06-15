@@ -14,6 +14,6 @@ class NWSClient:
             response.raise_for_status()  # Will raise HTTPStatusError for non-200
             try:
                 return response.json()
-            except Exception as e:
+            except ValueError as e:
                 # Let JSON errors propagate for test coverage
                 raise e
