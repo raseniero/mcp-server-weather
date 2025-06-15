@@ -2,6 +2,7 @@
 
 ## Relevant Files
 
+- `tests/test_nws_client.py` - Unit tests for NWSClient
 - `src/weather/__init__.py` - Package initialization file
 - `src/weather/server.py` - MCP server implementation
 - `src/weather/nws_client.py` - NWS API client module
@@ -88,10 +89,10 @@
   - [ ] 4.1.3 Configure test coverage reporting
 
 - [ ] 4.2 Test NWS client
-  - [ ] 4.2.1 Test successful API responses
-  - [ ] 4.2.2 Test error handling
-  - [ ] 4.2.3 Test response parsing
-  - [ ] 4.2.4 Test rate limiting and retries
+  - [x] 4.2.1 Test successful API responses
+  - [x] 4.2.2 Test error handling
+  - [x] 4.2.3 Test response parsing
+  - [x] 4.2.4 Test rate limiting and retries
 
 - [ ] 4.3 Test server endpoints
   - [ ] 4.3.1 Test endpoint registration
