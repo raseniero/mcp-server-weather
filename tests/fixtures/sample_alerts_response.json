@@ -1,0 +1,70 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/terms#",
+      "@vocab": "https://api.weather.gov/terms#"
+    }
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.1234567890.20240101T120000Z.20240101T180000Z.NR",
+      "type": "Feature",
+      "properties": {
+        "@id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.1234567890.20240101T120000Z.20240101T180000Z.NR",
+        "@type": "wx:Alert",
+        "id": "urn:oid:2.49.0.1.840.0.1234567890",
+        "areaDesc": "San Francisco, CA",
+        "geocode": {
+          "SAME": ["006075", "006081"],
+          "UGC": ["CAC075", "CAC081"]
+        },
+        "affectedZones": [
+          "https://api.weather.gov/zones/forecast/CAC075",
+          "https://api.weather.gov/zones/forecast/CAC081"
+        ],
+        "references": [],
+        "sent": "2024-01-01T12:00:00-08:00",
+        "effective": "2024-01-01T12:00:00-08:00",
+        "onset": "2024-01-01T12:00:00-08:00",
+        "expires": "2024-01-01T18:00:00-08:00",
+        "ends": "2024-01-01T18:00:00-08:00",
+        "status": "Actual",
+        "messageType": "Alert",
+        "category": "Met",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Expected",
+        "event": "Small Craft Advisory",
+        "headline": "Small Craft Advisory issued January 1 at 12:00PM PST until January 1 at 6:00PM PST",
+        "description": "...SMALL CRAFT ADVISORY REMAINS IN EFFECT UNTIL 6 PM PST THIS EVENING...\n* WHAT...Northwest winds 15 to 25 kt with gusts up to 30 kt and\nrough waters.\n* WHERE...San Francisco Bay, San Pablo Bay, Suisun Bay and the\nWest Delta and the San Francisco Bay.\n* WHEN...Until 6 PM PST this evening.\n* IMPACTS...Conditions will be hazardous to small craft.",
+        "instruction": "Inexperienced mariners, especially those operating smaller\nvessels, should avoid navigating in hazardous conditions.",
+        "response": "Avoid",
+        "parameters": {
+          "NWSheadline": ["Small Craft Advisory remains in effect until 6 PM PST this evening"],
+          "BLOCKCHANNEL": ["EAS", "NWEM", "CMAS"],
+          "EAS-ORG": ["WXR"],
+          "NWS_EXPIRES": ["2024-01-01T18:00:00-08:00"],
+          "NWS_WARN_GROUP": ["MARINE"],
+          "VTEC": ["/O.CAN.KMTR.SC.Y.0001.000000T0000Z-240101T180000Z/",
+                  "/O.NEW.KMTR.SC.Y.0002.240101T120000Z-240101T180000Z/"]
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-122.52, 37.77],
+            [-122.39, 37.91],
+            [-122.25, 37.80],
+            [-122.52, 37.77]
+          ]
+        ]
+      }
+    }
+  ],
+  "title": "Current watches, warnings, and advisories for California",
+  "updated": "2024-01-01T12:00:00-08:00"
+}

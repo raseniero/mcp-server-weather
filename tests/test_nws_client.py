@@ -21,6 +21,7 @@ async def test_get_alerts_success(monkeypatch):
         return fake_response
     monkeypatch.setattr(NWSClient, "_make_request", fake_make_request)
     client = NWSClient()
+
     # Act
     alerts = await client.get_alerts("CA")
     # Assert

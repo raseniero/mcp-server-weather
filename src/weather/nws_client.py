@@ -4,8 +4,13 @@ from typing import Any
 class NWSClient:
     """
     Client for interacting with the National Weather Service (NWS) API.
+
+    Provides methods to fetch weather alerts and other data from the NWS API asynchronously.
     """
     def __init__(self) -> None:
+        """
+        Initialize a new NWSClient instance.
+        """
         pass
 
     async def get_alerts(self, state: str):
@@ -42,6 +47,19 @@ class NWSClient:
         return alerts
 
     async def _make_request(self, url: str) -> dict[str, Any]:
+        """
+        Make an asynchronous GET request to the given URL and return the parsed JSON response.
+
+        Args:
+            url (str): The URL to send the GET request to.
+
+        Returns:
+            dict[str, Any]: The parsed JSON response.
+
+        Raises:
+            httpx.HTTPStatusError: If the response status is not 200.
+            ValueError: If the response body is not valid JSON.
+        """
         async with httpx.AsyncClient(timeout=10.0) as client:
             response = await client.get(url)
             response.raise_for_status()  # Will raise HTTPStatusError for non-200
