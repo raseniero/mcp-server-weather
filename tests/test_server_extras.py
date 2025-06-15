@@ -14,31 +14,23 @@ from src.weather.nws_client import NWSClient
 
 
 @pytest.mark.asyncio
-async def test_make_nws_request_json_error(monkeypatch):
+@pytest.mark.parametrize(
+    "error_type, error_value",
+    [
+        ("json", ValueError("bad json")),
+        ("http", httpx.HTTPStatusError("err", request=None, response=None)),
+        ("request", httpx.RequestError("network")),
+        ("generic", Exception("oops")),
+    ],
+)
+async def test_make_nws_request_errors(monkeypatch, error_type, error_value):
     class DummyResponse:
         def raise_for_status(self):
-            pass
+            if error_type == "http":
+                raise error_value
         def json(self):
-            raise ValueError("bad json")
-
-    class DummyClient:
-        async def __aenter__(self):
-            return self
-        async def __aexit__(self, exc_type, exc, tb):
-            pass
-        async def get(self, url, headers=None, timeout=None):
-            return DummyResponse()
-
-    monkeypatch.setattr(httpx, "AsyncClient", DummyClient)
-    assert await make_nws_request("http://dummy") is None
-
-
-@pytest.mark.asyncio
-async def test_make_nws_request_http_error(monkeypatch):
-    class DummyResponse:
-        def raise_for_status(self):
-            raise httpx.HTTPStatusError("err", request=None, response=None)
-        def json(self):
+            if error_type == "json":
+                raise error_value
             return {}
 
     class DummyClient:
