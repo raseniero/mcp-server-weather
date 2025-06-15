@@ -1,6 +1,7 @@
 from typing import Any
 import httpx
 from mcp.server.fastmcp import FastMCP
+from starlette.responses import JSONResponse
 
 class WeatherServer:
     """
@@ -223,6 +224,12 @@ async def get_forecast(latitude: float, longitude: float) -> str:
         forecasts.append(forecast)
     return "\n---\n".join(forecasts)
 
+
+
+@mcp.custom_route("/health", methods=["GET"])
+async def health_check(request):
+    """Health check endpoint."""
+    return JSONResponse({"status": "ok"})
 
 
 if __name__ == "__main__":
