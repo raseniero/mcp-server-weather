@@ -73,7 +73,7 @@
   - [x] 3.1.3 Add type hints and docstrings
   - [x] 3.1.4 Implement proper error handling
 
-- [ ] 3.2 Update endpoint implementations
+- [x] 3.2 Update endpoint implementations
   - [x] 3.2.1 Write test for `/get_alerts` endpoint
   - [x] 3.2.2 Refactor endpoint to use NWS client
   - [x] 3.2.3 Write test for `/get_forecast` endpoint
@@ -83,7 +83,7 @@
 
 ### 4.0 Implement Unit Tests
 
-- [x] 4.1 Set up test fixtures *(complete and merged to main)*
+- [x] 4.1 Set up test fixtures
   - [x] 4.1.1 Create mock NWS API responses
   - [x] 4.1.2 Set up pytest fixtures for client and server
   - [x] 4.1.3 Configure test coverage reporting
@@ -94,11 +94,11 @@
   - [x] 4.2.3 Test response parsing
   - [x] 4.2.4 Test rate limiting and retries
 
-- [ ] 4.3 Test server endpoints
+- [x] 4.3 Test server endpoints
   - [x] 4.3.1 Test endpoint registration
   - [x] 4.3.2 Test request validation
   - [x] 4.3.3 Test error responses
-  - [ ] 4.3.4 Test integration with NWS client
+  - [x] 4.3.4 Test integration with NWS client
 
 ### 5.0 Documentation and Finalization
 
