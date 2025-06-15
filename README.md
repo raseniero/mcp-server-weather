@@ -1,10 +1,27 @@
 # Weather MCP Server
 
-A lightweight FastMCP service exposing National Weather Service alerts and forecasts via simple RPC-style “tools”.
+A lightweight FastMCP service exposing National Weather Service alerts and forecasts via simple RPC-style "tools".
 
 ## Installation
 
-Install from PyPI:
+First, install [uv](https://github.com/astral-sh/uv) (a fast Python package manager) if you don't have it already:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+# Create virtual environment and activate it
+```bash
+uv venv
+source .venv/bin/activate
+```
+
+# Install dependencies
+```bash
+uv add "mcp[cli]" httpx
+```
+
+Then install from PyPI:
 
 ```bash
 pip install weather-mcp-server
@@ -40,6 +57,26 @@ asyncio.run(main())
 ```bash
 weather-mcp-server --transport stdio
 ```
+
+Or
+
+```bash
+uv run main.py
+```
+
+To run the MCP Inspector:
+
+```bash
+npx @modelcontextprotocol/inspector
+```
+Copy the Session token and the Proxy server listening on, example below:
+
+```bash
+Proxy server listening on 127.0.0.1:6277
+Session token: dc7a47f8b6b1a3eede7c507a8d1c9a7f7e6b3ff46c138f8480bbfbae3c45a9e4
+```
+
+Open the MCP Inspector in your browser:http://127.0.0.1:6274, and in the Configuration, paste the *Inspector Proxy Address* and *Proxy Session Token*
 
 ## API Reference
 
