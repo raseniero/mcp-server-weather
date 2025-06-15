@@ -1,10 +1,11 @@
 """
 Additional unit tests to increase coverage of server module error paths and helpers.
 """
+
 import pytest
 import httpx
 
-from weather.server import (
+from src.weather.server import (
     make_nws_request,
     get_alerts_data,
     format_alert,
@@ -28,6 +29,7 @@ async def test_make_nws_request_errors(monkeypatch, error_type, error_value):
         def raise_for_status(self):
             if error_type == "http":
                 raise error_value
+
         def json(self):
             if error_type == "json":
                 raise error_value
@@ -36,8 +38,10 @@ async def test_make_nws_request_errors(monkeypatch, error_type, error_value):
     class DummyClient:
         async def __aenter__(self):
             return self
+
         async def __aexit__(self, exc_type, exc, tb):
             pass
+
         async def get(self, url, headers=None, timeout=None):
             return DummyResponse()
 
@@ -50,8 +54,10 @@ async def test_make_nws_request_request_error(monkeypatch):
     class DummyClient:
         async def __aenter__(self):
             return self
+
         async def __aexit__(self, exc_type, exc, tb):
             pass
+
         async def get(self, url, headers=None, timeout=None):
             raise httpx.RequestError("network")
 
@@ -64,8 +70,10 @@ async def test_make_nws_request_generic_error(monkeypatch):
     class DummyClient:
         async def __aenter__(self):
             return self
+
         async def __aexit__(self, exc_type, exc, tb):
             pass
+
         async def get(self, url, headers=None, timeout=None):
             raise Exception("oops")
 

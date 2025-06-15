@@ -4,6 +4,7 @@ Tests for mock NWS API responses.
 This module contains tests that verify our mock NWS API response data structures
 match the expected formats for both alerts and forecast endpoints.
 """
+
 import pytest
 from pathlib import Path
 import json
@@ -17,9 +18,8 @@ FORECAST_RESPONSE_FILE = FIXTURES_DIR / "sample_forecast_response.json"
 
 # Expected top-level keys for API responses
 ALERTS_TOP_LEVEL_KEYS = {"@context", "features", "title", "updated", "type"}
-FORECAST_TOP_LEVEL_KEYS = {
-    "@context", "geometry", "properties", "type"
-}
+FORECAST_TOP_LEVEL_KEYS = {"@context", "geometry", "properties", "type"}
+
 
 class TestNWSMockResponses:
     """Test that our mock NWS API responses have the expected structure."""
@@ -40,11 +40,11 @@ class TestNWSMockResponses:
         """Verify the structure of the sample alerts response."""
         # Check top-level keys
         assert set(sample_alerts_response.keys()) == ALERTS_TOP_LEVEL_KEYS
-        
+
         # Check features array exists and has at least one alert
         assert "features" in sample_alerts_response
         assert isinstance(sample_alerts_response["features"], list)
-        
+
         # If there are alerts, check their structure
         if sample_alerts_response["features"]:
             alert = sample_alerts_response["features"][0]
@@ -57,15 +57,15 @@ class TestNWSMockResponses:
         """Verify the structure of the sample forecast response."""
         # Check top-level keys
         assert set(sample_forecast_response.keys()) == FORECAST_TOP_LEVEL_KEYS
-        
+
         # Check properties exists and has forecast data
         assert "properties" in sample_forecast_response
         properties = sample_forecast_response["properties"]
-        
+
         # Check forecast periods exist
         assert "periods" in properties
         assert isinstance(properties["periods"], list)
-        
+
         # If there are forecast periods, check their structure
         if properties["periods"]:
             period = properties["periods"][0]
@@ -80,7 +80,7 @@ class TestNWSMockResponses:
         geometry = sample_forecast_response["geometry"]
         assert "type" in geometry
         assert "coordinates" in geometry
-        
+
         # Should be a polygon with coordinates
         assert geometry["type"] == "Polygon"
         assert isinstance(geometry["coordinates"], list)

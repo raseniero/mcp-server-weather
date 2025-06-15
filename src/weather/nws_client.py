@@ -1,6 +1,7 @@
 import httpx
 from typing import Any
 
+
 class NWSClient:
     RETRY_DELAY_SECONDS = 1
     """
@@ -8,6 +9,7 @@ class NWSClient:
 
     Provides methods to fetch weather alerts and other data from the NWS API asynchronously.
     """
+
     def __init__(self) -> None:
         """
         Initialize a new NWSClient instance.
@@ -20,6 +22,7 @@ class NWSClient:
         Returns a list of dicts with keys: headline, event, severity.
         """
         import asyncio
+
         url = f"https://api.weather.gov/alerts/active?area={state}"
         max_retries = 3
         for attempt in range(max_retries):
@@ -27,24 +30,32 @@ class NWSClient:
                 data = await self._make_request(url)
                 break
             except httpx.HTTPStatusError as e:
-                if hasattr(e, 'response') and e.response is not None and getattr(e.response, 'status_code', None) == 429:
+                if (
+                    hasattr(e, "response")
+                    and e.response is not None
+                    and getattr(e.response, "status_code", None) == 429
+                ):
                     if attempt < max_retries - 1:
                         await asyncio.sleep(self.RETRY_DELAY_SECONDS)
                         continue
                 raise
         else:
-            raise httpx.HTTPStatusError("Too Many Requests after retries", request=None, response=None)
+            raise httpx.HTTPStatusError(
+                "Too Many Requests after retries", request=None, response=None
+            )
         features = data.get("features")
         if not isinstance(features, list):
             raise ValueError("Malformed response: missing or invalid 'features' key")
         alerts = []
         for feature in features:
             prop = feature.get("properties", {})
-            alerts.append({
-                "headline": prop.get("headline"),
-                "event": prop.get("event"),
-                "severity": prop.get("severity"),
-            })
+            alerts.append(
+                {
+                    "headline": prop.get("headline"),
+                    "event": prop.get("event"),
+                    "severity": prop.get("severity"),
+                }
+            )
         return alerts
 
     async def _make_request(self, url: str) -> dict[str, Any]:

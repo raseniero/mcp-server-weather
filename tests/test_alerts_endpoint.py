@@ -2,6 +2,7 @@ import pytest
 from httpx import AsyncClient
 from src.weather.server import get_alerts
 
+
 @pytest.mark.asyncio
 async def test_get_alerts_endpoint(monkeypatch):
     """
@@ -10,12 +11,20 @@ async def test_get_alerts_endpoint(monkeypatch):
     """
     # Arrange: monkeypatch NWSClient._make_request to avoid real API calls
     from src.weather.nws_client import NWSClient
+
     async def fake_make_nws_request(self, url):
         return {
             "features": [
-                {"properties": {"event": "Flood Warning", "severity": "Severe", "headline": "Flooding in effect"}}
+                {
+                    "properties": {
+                        "event": "Flood Warning",
+                        "severity": "Severe",
+                        "headline": "Flooding in effect",
+                    }
+                }
             ]
         }
+
     monkeypatch.setattr(NWSClient, "_make_request", fake_make_nws_request)
 
     # Act: call the get_alerts tool function directly
