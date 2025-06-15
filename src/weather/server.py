@@ -22,6 +22,40 @@ async def make_nws_request(url: str) -> dict[str, Any] | None:
             return None
 
 
+async def get_alerts_data(state: str) -> list[dict[str, Any]]:
+    """
+    Fetches weather alerts for a given US state and returns a list of alerts with event info.
+    """
+    url = f"{NWS_API_BASE}/alerts/active?area={state}"
+    data = await make_nws_request(url)
+    if not data or "features" not in data:
+        return []
+    alerts = []
+    for feature in data["features"]:
+        props = feature.get("properties", {})
+        alerts.append({
+            "headline": props.get("headline"),
+            "event": props.get("event"),
+            "severity": props.get("severity"),
+        })
+    return alerts
+
+@mcp.tool()
+async def get_alerts(state: str) -> str:
+    """
+    FastMCP tool: Returns formatted weather alerts string for a US state.
+    """
+    alerts = await get_alerts_data(state)
+    if not alerts:
+        return f"No alerts found for state: {state}"
+    formatted = []
+    for alert in alerts:
+        formatted.append(
+            f"Event: {alert['event']}\nSeverity: {alert['severity']}\nHeadline: {alert['headline']}"
+        )
+    return "\n---\n".join(formatted)
+
+
 def format_alert(feature: dict) -> str:
     """Format an alert feature into a readable string."""
     props = feature["properties"]
@@ -54,6 +88,20 @@ async def get_alerts(state: str) -> str:
     return "\n---\n".join(alerts)
 
 
+async def get_forecast_data(latitude: float, longitude: float) -> list[dict[str, Any]]:
+    """
+    Internal: Fetch forecast periods for given coordinates.
+    """
+    points_url = f"{NWS_API_BASE}/points/{latitude},{longitude}"
+    points_data = await make_nws_request(points_url)
+    if not points_data or "properties" not in points_data or "forecast" not in points_data["properties"]:
+        return []
+    forecast_url = points_data["properties"]["forecast"]
+    forecast_data = await make_nws_request(forecast_url)
+    if not forecast_data or "properties" not in forecast_data or "periods" not in forecast_data["properties"]:
+        return []
+    return forecast_data["properties"]["periods"]
+
 @mcp.tool()
 async def get_forecast(latitude: float, longitude: float) -> str:
     """Get weather forecast for a location.
@@ -62,22 +110,9 @@ async def get_forecast(latitude: float, longitude: float) -> str:
         latitude: Latitude of the location
         longitude: Longitude of the location
     """
-    # First get the forecast grid endpoint
-    points_url = f"{NWS_API_BASE}/points/{latitude},{longitude}"
-    points_data = await make_nws_request(points_url)
-
-    if not points_data:
+    periods = await get_forecast_data(latitude, longitude)
+    if not periods:
         return "Unable to fetch forecast data for this location."
-
-    # Get the forecast URL from the points response
-    forecast_url = points_data["properties"]["forecast"]
-    forecast_data = await make_nws_request(forecast_url)
-
-    if not forecast_data:
-        return "Unable to fetch detailed forecast."
-
-    # Format the periods into a readable forecast
-    periods = forecast_data["properties"]["periods"]
     forecasts = []
     for period in periods[:5]:  # Only show next 5 periods
         forecast = f"""
@@ -87,7 +122,6 @@ async def get_forecast(latitude: float, longitude: float) -> str:
             Forecast: {period['detailedForecast']}
         """
         forecasts.append(forecast)
-
     return "\n---\n".join(forecasts)
 
 
