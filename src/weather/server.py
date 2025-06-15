@@ -92,9 +92,10 @@ async def get_alerts(state: str) -> str:
 
 
 def format_alert(feature: dict) -> str:
-    """Format an alert feature into a readable string."""
+    """Format an alert feature into a readable string, including the headline."""
     props = feature["properties"]
     return f"""
+        Headline: {props.get('headline', 'No headline available')}
         Event: {props.get('event', 'Unknown')}
         Area: {props.get('areaDesc', 'Unknown')}
         Severity: {props.get('severity', 'Unknown')}
