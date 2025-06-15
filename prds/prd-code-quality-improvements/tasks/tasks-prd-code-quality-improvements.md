@@ -102,19 +102,19 @@
 
 ### 5.0 Documentation and Finalization
 
-- [ ] 5.1 Create/update README
-  - [ ] 5.1.1 Add project description
-  - [ ] 5.1.2 Document installation
-  - [ ] 5.1.3 Add usage examples
-  - [ ] 5.1.4 Document API reference
+- [x] 5.1 Create/update README
+  - [x] 5.1.1 Add project description
+  - [x] 5.1.2 Document installation
+  - [x] 5.1.3 Add usage examples
+  - [x] 5.1.4 Document API reference
 
-- [ ] 5.2 Add contribution guidelines
-  - [ ] 5.2.1 Document development setup
-  - [ ] 5.2.2 Explain coding standards
-  - [ ] 5.2.3 Describe pull request process
+- [x] 5.2 Add contribution guidelines
+  - [x] 5.2.1 Document development setup
+  - [x] 5.2.2 Explain coding standards
+  - [x] 5.2.3 Describe pull request process
 
-- [ ] 5.3 Final checks
-  - [ ] 5.3.1 Run all tests
-  - [ ] 5.3.2 Check code coverage
-  - [ ] 5.3.3 Run linter and formatter
-  - [ ] 5.3.4 Verify backward compatibility
+- [x] 5.3 Final checks
+  - [x] 5.3.1 Run all tests
+  - [x] 5.3.2 Check code coverage
+  - [x] 5.3.3 Run linter and formatter
+  - [x] 5.3.4 Verify backward compatibility
