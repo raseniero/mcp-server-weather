@@ -51,11 +51,11 @@
   - [x] 2.1.4 Refactor to pass initialization test
   - [x] 2.1.5 Add type hints and docstrings
 
-- [ ] 2.2 Implement request utilities
-  - [ ] 2.2.1 Write failing test for `_make_request` method
-  - [ ] 2.2.2 Implement `_make_request` with error handling
-  - [ ] 2.2.3 Add tests for error cases
-  - [ ] 2.2.4 Refactor implementation to pass all tests
+- [x] 2.2 Implement request utilities
+  - [x] 2.2.1 Write failing test for `_make_request` method
+  - [x] 2.2.2 Implement minimal `_make_request` method in `NWSClient`
+  - [x] 2.2.3 Add tests for error cases
+  - [x] 2.2.4 Refactor implementation to pass all tests
 
 - [ ] 2.3 Add NWS API endpoints
   - [ ] 2.3.1 Write test for `get_alerts` method
