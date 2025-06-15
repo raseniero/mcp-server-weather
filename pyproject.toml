@@ -61,3 +61,6 @@ omit = ["**/__init__.py"]
 show_missing = true
 skip_covered = true
 fail_under = 80
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/weather"]

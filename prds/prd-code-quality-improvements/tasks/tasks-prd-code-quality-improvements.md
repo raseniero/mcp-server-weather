@@ -35,12 +35,12 @@
   - [x] 1.1.4 Create `tests` directory with `__init__.py`
   - [x] 1.1.5 Create `conftest.py` for pytest configuration
 
-- [ ] 1.2 Configure development environment
+- [x] 1.2 Configure development environment
   - [x] 1.2.1 Update `pyproject.toml` with project metadata
-  - [ ] 1.2.2 Add development dependencies (pytest, black, flake8, mypy)
-  - [ ] 1.2.3 Configure black and flake8 in `pyproject.toml`
-  - [ ] 1.2.4 Create `.flake8` configuration file
-  - [ ] 1.2.5 Update `.gitignore` for Python projects
+  - [x] 1.2.2 Add development dependencies (pytest, black, flake8, mypy)
+  - [x] 1.2.3 Configure black and flake8 in `pyproject.toml`
+  - [x] 1.2.4 Create `.flake8` configuration file
+  - [x] 1.2.5 Update `.gitignore` for Python projects
 
 ### 2.0 Refactor NWS Client Module
 
