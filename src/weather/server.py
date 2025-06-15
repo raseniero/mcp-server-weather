@@ -2,6 +2,10 @@ from typing import Any
 import httpx
 from mcp.server.fastmcp import FastMCP
 
+class WeatherServer:
+    def __init__(self):
+        self.mcp = FastMCP("weather")
+
 # Initialize FastMCP server
 mcp = FastMCP("weather")
 
@@ -30,6 +34,8 @@ async def get_alerts_data(state: str) -> list[dict[str, Any]]:
     data = await make_nws_request(url)
     if not data or "features" not in data:
         return []
+    if not isinstance(data["features"], list):
+        raise ValueError("Malformed response: 'features' is not a list.")
     alerts = []
     for feature in data["features"]:
         props = feature.get("properties", {})
@@ -68,6 +74,10 @@ def format_alert(feature: dict) -> str:
     """
 
 
+US_STATES = {
+    "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
+}
+
 @mcp.tool()
 async def get_alerts(state: str) -> str:
     """Get weather alerts for a US state.
@@ -75,15 +85,16 @@ async def get_alerts(state: str) -> str:
     Args:
         state: Two-letter US state code (e.g. CA, NY)
     """
-    url = f"{NWS_API_BASE}/alerts/active/area/{state}"
-    data = await make_nws_request(url)
-
-    if not data or "features" not in data:
+    # Input validation
+    if not isinstance(state, str) or len(state) != 2 or not state.isalpha() or not state.isupper() or state not in US_STATES:
+        return "Invalid state code. Please provide a two-letter uppercase state abbreviation."
+    data = await make_nws_request(f"{NWS_API_BASE}/alerts/active?area={state}")
+    if not data:
         return "Unable to fetch alerts or no alerts found."
-
+    if "features" not in data:
+        return "Malformed response from weather service."
     if not data["features"]:
-        return "No active alerts for this state."
-
+        return f"No active alerts for state: {state}"
     alerts = [format_alert(feature) for feature in data["features"]]
     return "\n---\n".join(alerts)
 
@@ -95,12 +106,15 @@ async def get_forecast_data(latitude: float, longitude: float) -> list[dict[str,
     points_url = f"{NWS_API_BASE}/points/{latitude},{longitude}"
     points_data = await make_nws_request(points_url)
     if not points_data or "properties" not in points_data or "forecast" not in points_data["properties"]:
-        return []
+        raise ValueError("Malformed response: missing 'properties' or 'forecast'.")
     forecast_url = points_data["properties"]["forecast"]
     forecast_data = await make_nws_request(forecast_url)
     if not forecast_data or "properties" not in forecast_data or "periods" not in forecast_data["properties"]:
-        return []
-    return forecast_data["properties"]["periods"]
+        raise ValueError("Malformed response: missing 'properties' or 'periods'.")
+    periods = forecast_data["properties"]["periods"]
+    if not isinstance(periods, list):
+        raise ValueError("Malformed response: 'periods' is not a list.")
+    return periods
 
 @mcp.tool()
 async def get_forecast(latitude: float, longitude: float) -> str:
@@ -110,7 +124,18 @@ async def get_forecast(latitude: float, longitude: float) -> str:
         latitude: Latitude of the location
         longitude: Longitude of the location
     """
-    periods = await get_forecast_data(latitude, longitude)
+    # Input validation
+    try:
+        lat = float(latitude)
+        lon = float(longitude)
+    except (TypeError, ValueError):
+        return "Invalid coordinates. Latitude and longitude must be numbers."
+    if not (-90.0 <= lat <= 90.0 and -180.0 <= lon <= 180.0):
+        return "Invalid coordinates. Latitude must be between -90 and 90, longitude between -180 and 180."
+    try:
+        periods = await get_forecast_data(lat, lon)
+    except Exception:
+        return "Malformed response from weather service."
     if not periods:
         return "Unable to fetch forecast data for this location."
     forecasts = []
