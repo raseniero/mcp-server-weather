@@ -1,0 +1,92 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/terms#",
+      "@vocab": "https://api.weather.gov/terms#"
+    }
+  ],
+  "type": "Feature",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [-122.52, 37.77],
+        [-122.39, 37.91],
+        [-122.25, 37.80],
+        [-122.52, 37.77]
+      ]
+    ]
+  },
+  "properties": {
+    "updated": "2024-01-01T12:00:00-08:00",
+    "units": "us",
+    "forecastGenerator": "BaselineForecastGenerator",
+    "generatedAt": "2024-01-01T12:05:00-08:00",
+    "updateTime": "2024-01-01T12:00:00-08:00",
+    "validTimes": "2024-01-01T12:00:00-08:00/P7DT6H",
+    "elevation": {
+      "unitCode": "wmoUnit:m",
+      "value": 16
+    },
+    "periods": [
+      {
+        "number": 1,
+        "name": "This Afternoon",
+        "startTime": "2024-01-01T12:00:00-08:00",
+        "endTime": "2024-01-01T18:00:00-08:00",
+        "isDaytime": true,
+        "temperature": 62,
+        "temperatureUnit": "F",
+        "temperatureTrend": "falling",
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 20
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": 7.8
+        },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 62
+        },
+        "windSpeed": "15 mph",
+        "windGust": "25 mph",
+        "windDirection": "NW",
+        "icon": "https://api.weather.gov/icons/land/day/sct?size=medium",
+        "shortForecast": "Mostly Sunny",
+        "detailedForecast": "Mostly sunny, with a high near 62. Northwest wind around 15 mph, with gusts as high as 25 mph. Chance of precipitation is 20%."
+      },
+      {
+        "number": 2,
+        "name": "Tonight",
+        "startTime": "2024-01-01T18:00:00-08:00",
+        "endTime": "2024-01-02T06:00:00-08:00",
+        "isDaytime": false,
+        "temperature": 48,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 10
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": 5.6
+        },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 70
+        },
+        "windSpeed": "10 to 15 mph",
+        "windGust": "20 mph",
+        "windDirection": "NW",
+        "icon": "https://api.weather.gov/icons/land/night/few?size=medium",
+        "shortForecast": "Mostly Clear",
+        "detailedForecast": "Mostly clear, with a low around 48. Northwest wind 10 to 15 mph, with gusts as high as 20 mph. Chance of precipitation is 10%."
+      }
+    ]
+  }
+}

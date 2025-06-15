@@ -82,8 +82,8 @@
 
 ### 4.0 Implement Unit Tests
 
-- [ ] 4.1 Set up test fixtures
-  - [ ] 4.1.1 Create mock NWS API responses
+- [ ] 4.1 Set up test fixtures *(in progress: see feature/test-fixtures-4.1 branch)*
+  - [ ] 4.1.1 Create mock NWS API responses *(current sub-task)*
   - [ ] 4.1.2 Set up pytest fixtures for client and server
   - [ ] 4.1.3 Configure test coverage reporting
 
