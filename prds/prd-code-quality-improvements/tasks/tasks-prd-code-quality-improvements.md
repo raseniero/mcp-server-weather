@@ -69,8 +69,8 @@
 - [ ] 3.1 Restructure server implementation
   - [x] 3.1.1 Write failing test for server initialization
   - [x] 3.1.2 Refactor server code to pass initialization test
-  - [ ] 3.1.3 Add type hints and docstrings
-  - [ ] 3.1.4 Implement proper error handling
+  - [x] 3.1.3 Add type hints and docstrings
+  - [x] 3.1.4 Implement proper error handling
 
 - [ ] 3.2 Update endpoint implementations
   - [ ] 3.2.1 Write test for `/get_alerts` endpoint
