@@ -69,14 +69,21 @@ To run the MCP Inspector:
 ```bash
 npx @modelcontextprotocol/inspector
 ```
-Copy the Session token and the Proxy server listening on, example below:
+Copy the Session token and the Proxy server address (see example below).
 
 ```bash
 Proxy server listening on 127.0.0.1:6277
 Session token: dc7a47f8b6b1a3eede7c507a8d1c9a7f7e6b3ff46c138f8480bbfbae3c45a9e4
 ```
 
-Open the MCP Inspector in your browser:http://127.0.0.1:6274, and in the Configuration, paste the *Inspector Proxy Address* and *Proxy Session Token*
+Open the MCP Inspector in your browser:http://127.0.0.1:6274, and in the Configuration, paste the values to the following fields below:
+
+```
+Command: uv 
+Argument: run main.py
+Inspector Proxy Address: http://127.0.0.1:6274
+Proxy Session Token: dc7a47f8b6b1a3eede7c507a8d1c9a7f7e6b3ff46c138f8480bbfbae3c45a9e4
+```
 
 ## API Reference
 
@@ -128,3 +135,8 @@ Health check endpoint.
 
 - Test fixtures and monkeypatching are used to mock NWS API responses and isolate tests from network dependencies.
 - See `tests/conftest.py` for reusable fixtures.
+
+## References
+
+* [https://medium.com/data-engineering-with-dremio/building-a-basic-mcp-server-with-python-4c34c41031ed](https://medium.com/data-engineering-with-dremio/building-a-basic-mcp-server-with-python-4c34c41031ed)
+* [https://modelcontextprotocol.io/quickstart/server](https://modelcontextprotocol.io/quickstart/server)
