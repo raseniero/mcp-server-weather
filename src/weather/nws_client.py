@@ -2,6 +2,7 @@ import httpx
 from typing import Any
 
 class NWSClient:
+    RETRY_DELAY_SECONDS = 1
     """
     Client for interacting with the National Weather Service (NWS) API.
 

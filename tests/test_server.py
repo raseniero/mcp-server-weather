@@ -135,9 +135,10 @@ async def test_get_forecast_invalid_coords(server_module):
 @pytest.mark.asyncio
 async def test_get_forecast_malformed_response(monkeypatch, server_module):
     """Test get_forecast with a malformed API response (missing 'properties' or 'periods')."""
-    async def fake_make_nws_request(url):
+    async def fake_make_nws_request(self, url):
         return {"unexpected": "data"}
-    monkeypatch.setattr(server_module, "make_nws_request", fake_make_nws_request)
+    from src.weather.nws_client import NWSClient
+    monkeypatch.setattr(NWSClient, "_make_request", fake_make_nws_request)
     result = await server_module.get_forecast(34.05, -118.25)
     assert "Malformed response" in result
 
@@ -192,10 +193,11 @@ async def test_get_forecast_data_returns_expected_format(monkeypatch):
         }
     }
     responses = [fake_points, fake_forecast]
-    async def fake_make_nws_request(url):
+    async def fake_make_nws_request(self, url):
         return responses.pop(0)
     import weather.server as server_module
-    monkeypatch.setattr(server_module, "make_nws_request", fake_make_nws_request)
+    from src.weather.nws_client import NWSClient
+    monkeypatch.setattr(NWSClient, "_make_request", fake_make_nws_request)
     # Call get_forecast_data with valid coordinates
     result = await server_module.get_forecast_data(34.05, -118.25)
     assert isinstance(result, list)
