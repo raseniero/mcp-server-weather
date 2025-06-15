@@ -102,10 +102,7 @@ async def get_alerts(state: str) -> str:
     if not isinstance(state, str) or len(state) != 2 or not state.isalpha() or not state.isupper() or state not in US_STATES:
         return "Invalid state code. Please provide a two-letter uppercase state abbreviation."
     client = NWSClient()
-    try:
-        alerts_data = await get_alerts_data(state, client=client)
-    except (httpx.HTTPStatusError, ValueError):
-        return "Malformed response from weather service."
+    alerts_data = await get_alerts_data(state, client=client)
     if alerts_data is None:
         return "Malformed response from weather service."
     if not alerts_data:
