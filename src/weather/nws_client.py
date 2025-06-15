@@ -28,7 +28,7 @@ class NWSClient:
             except httpx.HTTPStatusError as e:
                 if hasattr(e, 'response') and e.response is not None and getattr(e.response, 'status_code', None) == 429:
                     if attempt < max_retries - 1:
-                        await asyncio.sleep(0.1)
+                        await asyncio.sleep(self.RETRY_DELAY_SECONDS)
                         continue
                 raise
         else:
