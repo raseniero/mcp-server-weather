@@ -81,7 +81,7 @@ async def test_get_forecast_malformed_response(monkeypatch, server_module):
         return {"unexpected": "data"}
     monkeypatch.setattr(server_module, "make_nws_request", fake_make_nws_request)
     result = await server_module.get_forecast(34.05, -118.25)
-    assert "Malformed response" in result or "Unable to fetch detailed forecast." in result
+    assert "Malformed response" in result
 
 @pytest.mark.asyncio
 async def test_get_alerts_returns_expected_format(monkeypatch):
