@@ -66,22 +66,26 @@ async def get_alerts_data(state: str, client: NWSClient | None = None) -> list[d
     if client is None:
         client = NWSClient()
     url = f"{NWS_API_BASE}/alerts/active?area={state}"
-    data = await client._make_request(url)
-    if not data:
+    try:
+        data = await client._make_request(url)
+        if not data:
+            return None
+        if "features" not in data:
+            return None
+        if not isinstance(data["features"], list):
+            return None
+        alerts: list[dict[str, Any]] = []
+        for feature in data["features"]:
+            props = feature.get("properties", {})
+            alerts.append({
+                "headline": props.get("headline"),
+                "event": props.get("event"),
+                "severity": props.get("severity"),
+            })
+        return alerts
+    except (httpx.HTTPStatusError, ValueError):
         return None
-    if "features" not in data:
-        return None
-    if not isinstance(data["features"], list):
-        raise ValueError("Malformed response: 'features' is not a list.")
-    alerts: list[dict[str, Any]] = []
-    for feature in data["features"]:
-        props = feature.get("properties", {})
-        alerts.append({
-            "headline": props.get("headline"),
-            "event": props.get("event"),
-            "severity": props.get("severity"),
-        })
-    return alerts
+
 
 @mcp.tool()
 async def get_alerts(state: str) -> str:
@@ -94,20 +98,18 @@ async def get_alerts(state: str) -> str:
     Returns:
         A formatted string of alerts or an error message.
     """
+    
     # Input validation
     if not isinstance(state, str) or len(state) != 2 or not state.isalpha() or not state.isupper() or state not in US_STATES:
         return "Invalid state code. Please provide a two-letter uppercase state abbreviation."
     client = NWSClient()
     alerts_data = await get_alerts_data(state, client=client)
     if alerts_data is None:
-        # Distinguish between malformed and empty
-        # If the API response is missing or malformed
         return "Malformed response from weather service."
     if not alerts_data:
         return f"No active alerts for state: {state}"
     formatted = [format_alert({"properties": alert}) for alert in alerts_data]
     return "\n---\n".join(formatted)
-
 
 
 def format_alert(feature: dict) -> str:
@@ -206,10 +208,9 @@ async def get_forecast(latitude: float, longitude: float) -> str:
     client = NWSClient()
     try:
         periods = await get_forecast_data(lat, lon, client=client)
-    except ValueError as e:
-        return str(e)
+    except (httpx.HTTPStatusError, ValueError):
+        return "Malformed response from weather service."
     except Exception:
-        # Optionally log error here
         return "Malformed response from weather service."
     if not periods:
         return "Unable to fetch forecast data for this location."

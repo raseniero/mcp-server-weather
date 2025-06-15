@@ -95,9 +95,9 @@
   - [x] 4.2.4 Test rate limiting and retries
 
 - [ ] 4.3 Test server endpoints
-  - [ ] 4.3.1 Test endpoint registration
-  - [ ] 4.3.2 Test request validation
-  - [ ] 4.3.3 Test error responses
+  - [x] 4.3.1 Test endpoint registration
+  - [x] 4.3.2 Test request validation
+  - [x] 4.3.3 Test error responses
   - [ ] 4.3.4 Test integration with NWS client
 
 ### 5.0 Documentation and Finalization

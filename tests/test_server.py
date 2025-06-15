@@ -54,6 +54,63 @@ async def test_get_forecast_tool_registration(server_module):
     # Optionally, check if callable(getattr(server_module.mcp, 'get_forecast', None))
 
 @pytest.mark.asyncio
+async def test_get_alerts_input_validation(server_module):
+    """RED: get_alerts should return error for invalid state codes (lowercase, non-alpha, wrong length, missing)."""
+    # Arrange/Act/Assert
+    invalid_inputs = ["ca", "C1", "", None, "ZZZ", 123]
+    for state in invalid_inputs:
+        result = await server_module.get_alerts(state)
+        assert "Invalid state code" in result
+
+@pytest.mark.asyncio
+async def test_get_forecast_input_validation(server_module):
+    """RED: get_forecast should return error for invalid coordinates (out-of-range, non-numeric, missing)."""
+    # Arrange/Act/Assert
+    invalid_coords = [
+        (None, None),
+        ("abc", 100),
+        (91, 0),
+        (0, -181),
+        ("", ""),
+        (200, 200),
+    ]
+    for lat, lon in invalid_coords:
+        result = await server_module.get_forecast(lat, lon)
+        assert "Invalid coordinates" in result
+
+@pytest.mark.asyncio
+async def test_get_alerts_error_response(monkeypatch, server_module):
+    """RED: get_alerts should return a specific error message if NWSClient raises httpx.HTTPStatusError or ValueError."""
+    import httpx
+    from src.weather.nws_client import NWSClient
+    async def raise_http_error(self, url):
+        raise httpx.HTTPStatusError("error", request=None, response=None)
+    monkeypatch.setattr(NWSClient, "_make_request", raise_http_error)
+    result = await server_module.get_alerts("CA")
+    assert "Malformed response" in result or "weather service" in result
+    async def raise_value_error(self, url):
+        raise ValueError("bad json")
+    monkeypatch.setattr(NWSClient, "_make_request", raise_value_error)
+    result2 = await server_module.get_alerts("CA")
+    assert "Malformed response" in result2 or "weather service" in result2
+
+@pytest.mark.asyncio
+async def test_get_forecast_error_response(monkeypatch, server_module):
+    """RED: get_forecast should return a specific error message if NWSClient raises httpx.HTTPStatusError or ValueError."""
+    import httpx
+    from src.weather.nws_client import NWSClient
+    async def raise_http_error(self, url):
+        raise httpx.HTTPStatusError("error", request=None, response=None)
+    monkeypatch.setattr(NWSClient, "_make_request", raise_http_error)
+    result = await server_module.get_forecast(34.05, -118.25)
+    assert "Malformed response" in result or "weather service" in result
+    async def raise_value_error(self, url):
+        raise ValueError("bad json")
+    monkeypatch.setattr(NWSClient, "_make_request", raise_value_error)
+    result2 = await server_module.get_forecast(34.05, -118.25)
+    assert "Malformed response" in result2 or "weather service" in result2
+
+@pytest.mark.asyncio
 async def test_get_alerts_invalid_state(server_module):
     """Test get_alerts with an invalid state code."""
     result = await server_module.get_alerts("ZZ")
