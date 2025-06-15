@@ -1,6 +1,5 @@
 import pytest
 from httpx import AsyncClient
-from mcp.server.fastmcp import FastMCP
 from src.weather.server import get_alerts
 
 @pytest.mark.asyncio
