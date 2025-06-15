@@ -166,6 +166,13 @@ async def test_get_alerts_returns_expected_format(monkeypatch):
     assert result[1]["event"] == "Flood"
 
 @pytest.mark.asyncio
+async def test_health_check_endpoint(test_client):
+    """Test the /health endpoint."""
+    response = await test_client.get("/health")
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
+
+@pytest.mark.asyncio
 async def test_get_forecast_data_returns_expected_format(monkeypatch):
     """
     Failing test for get_forecast_data: should return a list of forecast periods for valid coordinates.

@@ -2,6 +2,7 @@
 
 ## Relevant Files
 
+- `tests/test_nws_client.py` - Unit tests for NWSClient
 - `src/weather/__init__.py` - Package initialization file
 - `src/weather/server.py` - MCP server implementation
 - `src/weather/nws_client.py` - NWS API client module
