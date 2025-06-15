@@ -28,15 +28,15 @@
 
 ### 1.0 Project Setup and Configuration
 
-- [ ] 1.1 Create project structure
-  - [ ] 1.1.1 Create `src/weather` directory structure
-  - [ ] 1.1.2 Move existing `weather.py` to `src/weather/server.py`
-  - [ ] 1.1.3 Create `__init__.py` in `src/weather`
-  - [ ] 1.1.4 Create `tests` directory with `__init__.py`
-  - [ ] 1.1.5 Create `conftest.py` for pytest configuration
+- [x] 1.1 Create project structure
+  - [x] 1.1.1 Create `src/weather` directory structure
+  - [x] 1.1.2 Move existing `weather.py` to `src/weather/server.py`
+  - [x] 1.1.3 Create `__init__.py` in `src/weather`
+  - [x] 1.1.4 Create `tests` directory with `__init__.py`
+  - [x] 1.1.5 Create `conftest.py` for pytest configuration
 
 - [ ] 1.2 Configure development environment
-  - [ ] 1.2.1 Update `pyproject.toml` with project metadata
+  - [x] 1.2.1 Update `pyproject.toml` with project metadata
   - [ ] 1.2.2 Add development dependencies (pytest, black, flake8, mypy)
   - [ ] 1.2.3 Configure black and flake8 in `pyproject.toml`
   - [ ] 1.2.4 Create `.flake8` configuration file
