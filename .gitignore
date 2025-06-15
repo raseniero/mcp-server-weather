@@ -13,3 +13,7 @@ htmlcov/
 .pytest_cache/
 .cache/
 
+# Virtual environments
+.venv
+
+.DS_Store

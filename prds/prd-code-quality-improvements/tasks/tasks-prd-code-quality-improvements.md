@@ -44,12 +44,12 @@
 
 ### 2.0 Refactor NWS Client Module
 
-- [ ] 2.1 Create NWS client module
-  - [ ] 2.1.1 Create `tests/test_nws_client.py`
-  - [ ] 2.1.2 Write failing test for `NWSClient` initialization
-  - [ ] 2.1.3 Create `nws_client.py` with minimal implementation
-  - [ ] 2.1.4 Refactor to pass initialization test
-  - [ ] 2.1.5 Add type hints and docstrings
+- [x] 2.1 Create NWS client module
+  - [x] 2.1.1 Create `tests/test_nws_client.py`
+  - [x] 2.1.2 Write failing test for `NWSClient` initialization
+  - [x] 2.1.3 Create `nws_client.py` with minimal implementation
+  - [x] 2.1.4 Refactor to pass initialization test
+  - [x] 2.1.5 Add type hints and docstrings
 
 - [ ] 2.2 Implement request utilities
   - [ ] 2.2.1 Write failing test for `_make_request` method
