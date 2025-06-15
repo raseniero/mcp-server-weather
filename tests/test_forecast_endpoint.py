@@ -1,6 +1,7 @@
 import pytest
 from src.weather.server import get_forecast
 
+
 @pytest.mark.asyncio
 async def test_get_forecast_endpoint(monkeypatch):
     """
@@ -9,6 +10,7 @@ async def test_get_forecast_endpoint(monkeypatch):
     """
     # Arrange: monkeypatch NWSClient._make_request to avoid real API calls
     from src.weather.nws_client import NWSClient
+
     fake_points = {
         "properties": {
             "forecast": "https://api.weather.gov/gridpoints/XX/99,99/forecast"
@@ -23,7 +25,7 @@ async def test_get_forecast_endpoint(monkeypatch):
                     "temperatureUnit": "F",
                     "windSpeed": "5 mph",
                     "windDirection": "NW",
-                    "detailedForecast": "Clear. Low 55."
+                    "detailedForecast": "Clear. Low 55.",
                 },
                 {
                     "name": "Tomorrow",
@@ -31,14 +33,16 @@ async def test_get_forecast_endpoint(monkeypatch):
                     "temperatureUnit": "F",
                     "windSpeed": "10 mph",
                     "windDirection": "W",
-                    "detailedForecast": "Sunny. High 75."
-                }
+                    "detailedForecast": "Sunny. High 75.",
+                },
             ]
         }
     }
     responses = [fake_points, fake_forecast]
+
     async def fake_make_nws_request(self, url):
         return responses.pop(0)
+
     monkeypatch.setattr(NWSClient, "_make_request", fake_make_nws_request)
 
     # Act: call the get_forecast tool function directly

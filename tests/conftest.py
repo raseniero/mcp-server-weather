@@ -1,4 +1,5 @@
 """Pytest configuration and fixtures for the test suite."""
+
 import json
 import os
 import sys
@@ -26,7 +27,7 @@ def server_module():
 @pytest.fixture
 def mock_httpx_client():
     """Fixture to mock httpx.AsyncClient."""
-    with patch('httpx.AsyncClient') as mock_client:
+    with patch("httpx.AsyncClient") as mock_client:
         yield mock_client
 
 
@@ -46,5 +47,6 @@ def test_client(server_module):
     app = server_module.mcp.streamable_http_app()
     transport = ASGITransport(app=app)
     return AsyncClient(transport=transport, base_url="http://test")
+
 
 # Add any other common test utilities or fixtures here
