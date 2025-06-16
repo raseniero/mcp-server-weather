@@ -52,8 +52,6 @@ async def make_nws_request(url: str) -> dict[str, Any] | None:
             return None
 
 
-
-
 async def get_alerts_data(
     state: str, client: NWSClient | None = None
 ) -> list[dict[str, Any]] | None:
